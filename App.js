@@ -46,14 +46,15 @@ export default class App extends React.Component {
     try {
       const { type, token } = await Facebook.logInWithReadPermissionsAsync(
         fbAppId, // Replace with your own app id in standalone app
-        { permissions: ['public_profile'] }
+        { permissions: ['public_profile', 'email'] }
       );
-
+      console.log(token);
       switch (type) {
         case 'success': {
           // Get the user's name using Facebook's Graph API
           const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
           const profile = await response.json();
+          console.log(profile);
           Alert.alert(
             'Logged in!',
             `Hi ${profile.name}!`,
@@ -90,7 +91,7 @@ export default class App extends React.Component {
   render = () => (
     <View style={styles.container}>
       <View style={[styles.box, styles.box1]}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text>bikeMap</Text>
       </View>
       <View style={[styles.box, styles.box2]}>
         <Text>Should say something: {this.state.something}</Text>
