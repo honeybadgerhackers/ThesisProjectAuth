@@ -1,12 +1,14 @@
 const user = (user, action) => {
     switch (action.type) {
-      case 'LOGIN_USER':
+      case 'LOGIN':
         return user;
-      case 'LOGOUT_USER':
+      case 'LOGOUT':
         return null;
       default:
         return user;
     }
 };
+
+const mapStateToProps 
 
 export default user;

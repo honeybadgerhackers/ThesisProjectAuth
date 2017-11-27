@@ -1,13 +1,12 @@
-function loginUser(user, token) {
+export const loginUser = (user) => {
   return {
-    type: 'LOGIN_USER',
+    type: 'LOGIN',
     user,
-    token,
   };
-}
+};
 
-function logoutUser(user, token) {
+export const logoutUser = (user) => {
   return {
-    type: 'LOGOUT_USER',
+    type: 'LOGOUT',
   };
-}
+};

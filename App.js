@@ -1,8 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
-// import PropTypes from 'prop-types';
 import Login from './src/components/navigation/login';
-// import createSagaMiddleware from 'redux-saga';
+import Redirect from './src/components/navigation/test-splash-page';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,14 +10,27 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class App extends React.Component {
-  state = {
-    userInfo: null,
-  };
+const App = {
+  render: () => {
+    if (this.props.isLoggedIn) {
+      return (
+        <View style={styles.container}>
+          <Redirect />
+        </View>
+      )
+    }
+    return (
+      <View style={styles.container}>
+        <Login />
+      </View>
+    );
+  }
+};
 
-  render = () => (
-    <View style={styles.container}>
-      <Login />
-    </View>
-  );
+const mapStateToProps = (state, ownProps) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn
+    };
 }
+
+export default App;

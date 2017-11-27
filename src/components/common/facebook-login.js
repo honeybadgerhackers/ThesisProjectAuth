@@ -1,8 +1,20 @@
 import { Button } from 'react-native';
 import React from 'react';
 import { AuthSession } from 'expo';
+import { loginUser } from '../../actions/user-actions';
 
 const FB_APP_ID = '530424093970397';
+
+// const defaultState = {
+//   user: {
+//     id: null,
+//     email: null,
+//     first: null,
+//     last: null,
+//     profilePic: null,
+//     token: null,
+//   },
+// };
 
 export default class FacebookLogin extends React.Component {
   state = {
