@@ -13,10 +13,11 @@ const styles = StyleSheet.create({
   },
 });
 
+// const store = createStore(reducer, compose)
 // const sagaMiddleware = createSagaMiddleware();
 
 export default class App extends React.Component {
-    state = {
+  state = {
     userInfo: null,
   };
 
