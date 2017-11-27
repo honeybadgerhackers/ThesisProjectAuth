@@ -35,52 +35,8 @@ const styles = StyleSheet.create({
 // const sagaMiddleware = createSagaMiddleware();
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userInfo: null,
-      something: 'Goodbye!',
-    };
-  }
-  _handleFacebookLogin = async () => {
-    try {
-      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-        fbAppId, // Replace with your own app id in standalone app
-        { permissions: ['public_profile', 'email'] }
-      );
-      console.log(token);
-      switch (type) {
-        case 'success': {
-          // Get the user's name using Facebook's Graph API
-          const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-          const profile = await response.json();
-          console.log(profile);
-          Alert.alert(
-            'Logged in!',
-            `Hi ${profile.name}!`,
-          );
-          break;
-        }
-        case 'cancel': {
-          Alert.alert(
-            'Cancelled!',
-            'Login was cancelled!',
-          );
-          break;
-        }
-        default: {
-          Alert.alert(
-            'Oops!',
-            'Login failed!',
-          );
-        }
-      }
-    } catch (e) {
-      Alert.alert(
-        'Oops!',
-        'Login failed!',
-      );
-    }
+  state = {
+    userInfo: null,
   };
 
   _handlePressAsync = async () => {
@@ -111,11 +67,10 @@ export default class App extends React.Component {
 
     let accessToken = result.params.access_token;
     let userInfoResponse = await fetch(
-      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,last_name,first_name,email,picture.type(large)`
-    );
+      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,last_name,first_name,email,picture.type(large)`);
     const userInfo = await userInfoResponse.json();
-    console.log(userInfo);
     this.setState({ userInfo });
+    console.log(this.getState({ userInfo }));
   };
 
   something = () => {
@@ -123,6 +78,7 @@ export default class App extends React.Component {
       something: this.state.something === 'Goodbye!' ? 'Hello!' : 'Goodbye!',
     });
   }
+
   render = () => (
     <View style={styles.container}>
       <View style={[styles.box, styles.box1]}>
