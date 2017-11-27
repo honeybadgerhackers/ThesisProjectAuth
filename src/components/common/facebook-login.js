@@ -4,7 +4,7 @@ import { AuthSession } from 'expo';
 
 const FB_APP_ID = '530424093970397';
 
-export default class App extends React.Component {
+export default class FacebookLogin extends React.Component {
   state = {
     userInfo: null,
   };
