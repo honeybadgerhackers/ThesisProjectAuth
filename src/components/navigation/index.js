@@ -6,6 +6,25 @@ import { addNavigationHelpers, NavigationActions } from 'react-navigation';
 import LoginStack from './login-stack';
 
 class LoginNavigation extends React.Component {
+  static propTypes = {
+    isLoggedIn: PropTypes.shape({
+      first: PropTypes.string,
+      last: PropTypes.string,
+      profilePic: PropTypes.string,
+      token: PropTypes.string,
+      email: PropTypes.string,
+    }),
+    navigationState: PropTypes.shape({
+      index: PropTypes.number,
+      routes: PropTypes.array,
+    }).isRequired,
+    dispatch: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    isLoggedIn: null,
+  };
+
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
   }
@@ -39,25 +58,6 @@ const mapStateToProps = state => {
     isLoggedIn: state.user,
     navigationState: state.navigation,
   };
-};
-
-LoginNavigation.propTypes = {
-  isLoggedIn: PropTypes.shape({
-    first: PropTypes.string,
-    last: PropTypes.string,
-    profilePic: PropTypes.string,
-    token: PropTypes.string,
-    email: PropTypes.string,
-  }),
-  navigationState: PropTypes.shape({
-    index: PropTypes.number,
-    routes: PropTypes.array,
-  }).isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
-
-LoginNavigation.defaultProps = {
-  isLoggedIn: null,
 };
 
 export default connect(mapStateToProps)(LoginNavigation);

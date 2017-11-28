@@ -8,6 +8,10 @@ import { loginUser } from '../../actions/user-actions';
 const FB_APP_ID = '530424093970397';
 
 class FacebookLogin extends React.Component {
+  static propTypes = {
+    loginUser: PropTypes.func.isRequired,
+  };
+
   _handlePressAsync = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
 
@@ -63,10 +67,6 @@ class FacebookLogin extends React.Component {
 
 const mapDispatchToProps = {
   loginUser,
-};
-
-FacebookLogin.propTypes = {
-  loginUser: PropTypes.func.isRequired,
 };
 
 const Login = connect(null, mapDispatchToProps)(FacebookLogin);
