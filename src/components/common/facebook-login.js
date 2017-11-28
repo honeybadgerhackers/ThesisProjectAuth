@@ -2,19 +2,11 @@ import { Button } from 'react-native';
 import React from 'react';
 import { AuthSession } from 'expo';
 import { loginUser } from '../../actions/user-actions';
+import store from '../../store';
 
 const FB_APP_ID = '530424093970397';
 
-// const defaultState = {
-//   user: {
-//     id: null,
-//     email: null,
-//     first: null,
-//     last: null,
-//     profilePic: null,
-//     token: null,
-//   },
-// };
+console.log(store.getState());
 
 export default class FacebookLogin extends React.Component {
   _handlePressAsync = async () => {
@@ -46,11 +38,23 @@ export default class FacebookLogin extends React.Component {
     let accessToken = result.params.access_token;
     let userInfoResponse = await fetch(
       `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,last_name,first_name,email,picture.type(large)`);
-    const userInfo = await userInfoResponse.json();
-    
+    const {
+      email, first_name, last_name, picture: { data: { url } },
+    } = await userInfoResponse.json();
+    const user = {
+      first: first_name,
+      last: last_name,
+      profilePic: url,
+      // ! THIS IS NOT SECURE
+      token: accessToken,
+      email,
+    };
+    // console.log(user);
+
     // ! This is where user state is being set ! //
-    this.setState({ userInfo });
-    console.log(this.getState({ userInfo }));
+    store.dispatch(loginUser(user));
+
+    console.log(store.getState());
   };
 
   render = () => (

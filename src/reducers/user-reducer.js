@@ -1,7 +1,8 @@
-const user = (user, action) => {
+const user = (user = null, action) => {
     switch (action.type) {
       case 'LOGIN':
-        return user;
+        console.log('user', action);
+        return action.user;
       case 'LOGOUT':
         return null;
       default:
