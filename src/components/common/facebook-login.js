@@ -1,12 +1,12 @@
-import { Button } from 'react-native';
 import React from 'react';
+import { Button } from 'react-native';
+import { connect } from 'react-redux';
 import { AuthSession } from 'expo';
 import { loginUser } from '../../actions/user-actions';
-import store from '../../store';
 
 const FB_APP_ID = '530424093970397';
 
-export default class FacebookLogin extends React.Component {
+class FacebookLogin extends React.Component {
   _handlePressAsync = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
 
@@ -47,10 +47,9 @@ export default class FacebookLogin extends React.Component {
       token: accessToken,
       email,
     };
-
+    console.log('currentprops', this.props);
     // ! This is where user state is being set ! //
-    store.dispatch(loginUser(user));
-
+    this.props.loginUser(user);
   };
 
   render = () => (
@@ -60,3 +59,11 @@ export default class FacebookLogin extends React.Component {
     />
   );
 }
+
+const mapDispatchToProps = {
+  loginUser,
+};
+
+const Login = connect(null, mapDispatchToProps)(FacebookLogin);
+
+export default Login;

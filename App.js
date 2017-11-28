@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
-import Login from './src/components/screens/login';
+import LoginNavigation from './src/components/navigation';
 import store from './src/store';
 
 const styles = StyleSheet.create({
@@ -11,11 +11,12 @@ const styles = StyleSheet.create({
   },
 });
 
+
 const App = () => {
   return (
     <Provider store={store}>
       <View style={styles.container}>
-        <Login />
+        <LoginNavigation />
       </View>
     </Provider>
   );

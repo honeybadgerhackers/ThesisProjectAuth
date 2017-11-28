@@ -2,7 +2,9 @@ import { StackNavigator } from 'react-navigation';
 import Login from '../screens/login';
 import Redirect from '../screens/test-splash-page';
 
-const navigator = StackNavigator({
+console.log('inside LoginStack');
+
+const LoginStack = StackNavigator({
   login: {
     screen: Login,
   },
@@ -12,4 +14,4 @@ const navigator = StackNavigator({
   },
 });
 
-export default navigator;
+export default LoginStack;

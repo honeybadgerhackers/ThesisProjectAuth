@@ -4,4 +4,8 @@ import reducers from '../reducers';
 
 const store = createStore(reducers);
 
+store.subscribe(() => {
+  console.log('currentState', store.getState());
+});
+
 export default store;

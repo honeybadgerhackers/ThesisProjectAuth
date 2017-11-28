@@ -1,5 +1,5 @@
-import { StyleSheet, Image, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Image, View } from 'react-native';
 import { LinearGradient } from 'expo';
 import FacebookLogin from '../common/facebook-login';
 
