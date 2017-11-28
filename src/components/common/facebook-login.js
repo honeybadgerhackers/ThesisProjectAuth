@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button } from 'react-native';
+import { Button, Alert } from 'react-native';
 import { connect } from 'react-redux';
+import { PropTypes } from 'prop-types';
 import { AuthSession } from 'expo';
 import { loginUser } from '../../actions/user-actions';
 
@@ -29,13 +30,14 @@ class FacebookLogin extends React.Component {
     });
 
     if (result.type !== 'success') {
-      alert('Uh oh, something went wrong');
+      Alert.alert('Error', 'Uh oh, something went wrong');
       return;
     }
 
     let accessToken = result.params.access_token;
-    let userInfoResponse = await fetch(
-      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,last_name,first_name,email,picture.type(large)`);
+    const facebookURI = `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,last_name,first_name,email,picture.type(large)`;
+
+    let userInfoResponse = await fetch(facebookURI);
     const {
       email, first_name, last_name, picture: { data: { url } },
     } = await userInfoResponse.json();
@@ -61,6 +63,10 @@ class FacebookLogin extends React.Component {
 
 const mapDispatchToProps = {
   loginUser,
+};
+
+FacebookLogin.propTypes = {
+  loginUser: PropTypes.func.isRequired,
 };
 
 const Login = connect(null, mapDispatchToProps)(FacebookLogin);

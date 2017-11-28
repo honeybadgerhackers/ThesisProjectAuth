@@ -4,4 +4,7 @@ module.exports = {
     "rules": {
         "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }]
     },
+    "globals": {
+        "fetch": true,
+    } 
 };

@@ -49,6 +49,11 @@ LoginNavigation.propTypes = {
     token: PropTypes.string,
     email: PropTypes.string,
   }),
+  navigationState: PropTypes.shape({
+    index: PropTypes.number,
+    routes: PropTypes.array,
+  }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 LoginNavigation.defaultProps = {
