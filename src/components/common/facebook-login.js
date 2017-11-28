@@ -10,7 +10,7 @@ class FacebookLogin extends React.Component {
   _handlePressAsync = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
 
-    // You need to add this url to your authorized redirect urls on your Facebook app
+    // ! You need to add this url to your authorized redirect urls on your Facebook app
     console.log({ redirectUrl });
 
     // NOTICE: Please do not actually request the token on the client (see:
@@ -47,7 +47,6 @@ class FacebookLogin extends React.Component {
       token: accessToken,
       email,
     };
-    console.log('currentprops', this.props);
     // ! This is where user state is being set ! //
     this.props.loginUser(user);
   };
