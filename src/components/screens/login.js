@@ -24,14 +24,8 @@ const styles = StyleSheet.create({
   },
 });
 
-// const sagaMiddleware = createSagaMiddleware();
-
-export default class Login extends React.Component {
-  state = {
-    userInfo: null,
-  };
-
-  render = () => (
+const Login = () => {
+  return (
     <View style={[styles.box]}>
       <LinearGradient
         colors={['rgba(0,96,255,0.09)', 'transparent']}
@@ -65,3 +59,5 @@ export default class Login extends React.Component {
     </View>
   );
 }
+
+export default Login;

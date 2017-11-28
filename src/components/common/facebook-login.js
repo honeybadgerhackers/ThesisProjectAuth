@@ -6,8 +6,6 @@ import store from '../../store';
 
 const FB_APP_ID = '530424093970397';
 
-console.log(store.getState());
-
 export default class FacebookLogin extends React.Component {
   _handlePressAsync = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
@@ -45,16 +43,14 @@ export default class FacebookLogin extends React.Component {
       first: first_name,
       last: last_name,
       profilePic: url,
-      // ! THIS IS NOT SECURE
+      // ! THIS IS NOT SECURE ! //
       token: accessToken,
       email,
     };
-    // console.log(user);
 
     // ! This is where user state is being set ! //
     store.dispatch(loginUser(user));
 
-    console.log(store.getState());
   };
 
   render = () => (
