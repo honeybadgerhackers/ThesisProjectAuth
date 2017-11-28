@@ -24,8 +24,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const Login = () => {
-  return (
+export default class Login extends React.Component {
+  static navigationOptions = {
+    title: 'Login',
+  };
+
+  render = () => (
     <View style={[styles.box]}>
       <LinearGradient
         colors={['rgba(0,96,255,0.09)', 'transparent']}
@@ -59,5 +63,3 @@ const Login = () => {
     </View>
   );
 }
-
-export default Login;

@@ -9,12 +9,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const Redirect = {
-  render: () => (
+export default class Redirect extends React.Component {
+  static navigationOptions = {
+    title: 'Redirect',
+  };
+
+  render = () => (
     <View style={[styles.box]}>
       <Text>Welcome!</Text>
     </View>
-  ),
+  );
 };
-
-export default Redirect;
