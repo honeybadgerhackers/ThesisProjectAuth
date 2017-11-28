@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
 export default class Redirect extends React.Component {
   static navigationOptions = {
     title: 'Redirect',
+    header: null,
   };
 
   render = () => (

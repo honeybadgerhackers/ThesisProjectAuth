@@ -1,12 +1,9 @@
 import React from 'react';
-import { BackHandler, View } from "react-native";
+import { BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addNavigationHelpers, NavigationActions } from 'react-navigation';
 import LoginStack from './login-stack';
-
-console.log('inside navigation');
-// debugger;
 
 class LoginNavigation extends React.Component {
   componentDidMount() {
@@ -28,7 +25,6 @@ class LoginNavigation extends React.Component {
   };
   render() {
     const { navigationState, dispatch, isLoggedIn } = this.props;
-    console.log('navigationIndex', this.props)
     const state = isLoggedIn ?
       navigationState.stateForLoggedIn :
       navigationState.stateForLoggedOut;
@@ -39,7 +35,6 @@ class LoginNavigation extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     isLoggedIn: state.user,
     navigationState: state.navigation,

@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 export default class Login extends React.Component {
   static navigationOptions = {
     title: 'Login',
+    header: null,
   };
 
   render = () => (

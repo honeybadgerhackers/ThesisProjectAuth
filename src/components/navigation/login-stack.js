@@ -12,6 +12,6 @@ const LoginStack = StackNavigator({
   redirect: {
     screen: Redirect,
   },
-});
+}, { headerMode: 'screen' });
 
 export default LoginStack;
