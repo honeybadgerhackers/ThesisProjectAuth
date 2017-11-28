@@ -17,10 +17,6 @@ const FB_APP_ID = '530424093970397';
 // };
 
 export default class FacebookLogin extends React.Component {
-  state = {
-    userInfo: null,
-  };
-
   _handlePressAsync = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
 
@@ -51,7 +47,7 @@ export default class FacebookLogin extends React.Component {
     let userInfoResponse = await fetch(
       `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,last_name,first_name,email,picture.type(large)`);
     const userInfo = await userInfoResponse.json();
-
+    
     // ! This is where user state is being set ! //
     this.setState({ userInfo });
     console.log(this.getState({ userInfo }));

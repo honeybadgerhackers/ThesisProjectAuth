@@ -9,6 +9,4 @@ const user = (user, action) => {
     }
 };
 
-const mapStateToProps 
-
 export default user;
