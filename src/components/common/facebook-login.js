@@ -12,9 +12,13 @@ class FacebookLogin extends React.Component {
     loginUser: PropTypes.func.isRequired,
   };
 
+  state = {
+    disableButton: false,
+  }
+
   _handlePressAsync = async () => {
     let redirectUrl = AuthSession.getRedirectUrl();
-
+    this.setState({ disableButton: true });
     // ! You need to add this url to your authorized redirect urls on your Facebook app ! //
     console.log({ redirectUrl });
 
@@ -35,6 +39,7 @@ class FacebookLogin extends React.Component {
 
     if (result.type !== 'success') {
       Alert.alert('Error', 'Uh oh, something went wrong');
+      this.setState({ disableButton: false });
       return;
     }
 
@@ -54,6 +59,7 @@ class FacebookLogin extends React.Component {
       email,
     };
     // ! This is where user state is being set ! //
+    this.setState({ disableButton: false });
     this.props.loginUser(user);
   };
 
@@ -61,6 +67,7 @@ class FacebookLogin extends React.Component {
     <Button
       title="Login with Facebook"
       onPress={this._handlePressAsync}
+      disabled={this.state.disableButton}
     />
   );
 }
