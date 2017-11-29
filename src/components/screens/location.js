@@ -8,6 +8,7 @@ export default class WayPoint extends Component {
     location: null,
     errorMessage: null,
     disableButton: false,
+    userLocation: true,
     wayPoints: [],
     coords: [],
   };
@@ -26,6 +27,43 @@ export default class WayPoint extends Component {
     this._getDirections('OperationSpark,NewOrleans,LA', 'CreoleCreamery,NewOrleans,LA');
   }
 
+  componentWillUnmount() {
+    this._stopTrackLocation();
+  }
+
+  _generateCustomDirections = async () => {
+    const wayPointsObjects = [
+      { lat: 29.946668, lng: -90.073911 },
+      { lat: 29.944586, lng: -90.074984 },
+      { lat: 29.942354, lng: -90.074833},
+      { lat: 29.941369, lng: -90.074018 },
+      { lat: 29.939909, lng: -90.075016 },
+      { lat: 29.939054, lng: -90.077333 },
+    ];
+    const wayPoints = wayPointsObjects.map((waypoint) => {
+      return Object.values(waypoint).join();
+    })
+    const origin = wayPoints.splice(0, 1);
+    const destination = wayPoints.splice(wayPoints.length - 1, 1);
+    const joinedWaypoints = wayPoints.join('|');
+    try {
+      let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&waypoints=${joinedWaypoints}`);
+      let respJson = await resp.json();
+      let points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+      let coords = points.map((point, index) => {
+        return {
+          latitude: point[0],
+          longitude: point[1],
+        };
+      });
+      this.setState({ coords });
+      console.log(this.state.coords);
+      return coords;
+    } catch (error) {
+      return error;
+    }
+  }
+
   _getDirections = async (startLoc, destinationLoc) => {
     try {
       let resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}`);
@@ -34,8 +72,8 @@ export default class WayPoint extends Component {
       let coords = points.map((point, index) => {
         return {
           latitude: point[0],
-          longitude: point[1]
-        }
+          longitude: point[1],
+        };
       });
       this.setState({ coords });
       console.log(this.state.coords);
@@ -68,17 +106,27 @@ export default class WayPoint extends Component {
 
   _trackLocationAsync = async () => {
     this.setState({ disableButton: true });
-    Location.watchPositionAsync(
-      { distanceInterval: 5, timeInterval: 30000 },
+    this.track = await Location.watchPositionAsync(
+      { distanceInterval: 5, timeInterval: 30000, enableHighAccuracy: true },
       this._handlePositionChange
     );
   }
 
+  _stopTrackLocation = () => {
+    // debugger;
+    if (this.track) {
+      this.track.remove();
+      this.setState({ disableButton: false });
+    }
+    this._generateCustomDirections();
+  }
+
   _handlePositionChange = (location) => {
+    console.log('current location', location);
     const wayPoints = this.state.wayPoints.slice();
     wayPoints.push(location);
     this.setState({ wayPoints, location });
-    console.log(this.state.wayPoints, 'way points');
+    // console.log(this.state.wayPoints, 'way points');
   }
 
   render() {
@@ -94,6 +142,7 @@ export default class WayPoint extends Component {
         <MapView
           style={{ flex: 7 }}
           initialRegion={this.state.region}
+          showsUserLocation={this.state.userLocation}
         >
           <MapView.Polyline
             coordinates={this.state.coords}
@@ -106,6 +155,10 @@ export default class WayPoint extends Component {
             disabled={this.state.disableButton}
             title="Watch Location"
             onPress={this._trackLocationAsync}
+          />
+          <Button
+            title="Stop Watching"
+            onPress={this._stopTrackLocation}
           />
           <Text style={styles.paragraph}>{text}</Text>
         </View>
