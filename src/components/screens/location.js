@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Platform, Text, View, StyleSheet } from 'react-native';
+import { Platform, Text, View, StyleSheet, Button } from 'react-native';
 import { Constants, Location, Permissions } from 'expo';
 
-export default class Waypoint extends Component {
+export default class WayPoint extends Component {
   state = {
     location: null,
     errorMessage: null,
+    disableButton: false,
+    wayPoints: [],
   };
 
   componentWillMount() {
@@ -27,8 +29,24 @@ export default class Waypoint extends Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
     this.setState({ location });
   };
+
+  _trackLocationAsync = async () => {
+    this.setState({ disableButton: true });
+    Location.watchPositionAsync(
+      { distanceInterval: 5, timeInterval: 30000 },
+      this._handlePositionChange
+    );
+  }
+
+  _handlePositionChange = (location) => {
+    const wayPoints = this.state.wayPoints.slice();
+    wayPoints.push(location);
+    this.setState({ wayPoints, location });
+    console.log(this.state.wayPoints, 'way points');
+  }
 
   render() {
     let text = 'Waiting..';
@@ -40,6 +58,11 @@ export default class Waypoint extends Component {
 
     return (
       <View style={styles.container}>
+        <Button
+          disabled={this.state.disableButton}
+          title="Watch Location"
+          onPress={this._trackLocationAsync}
+        />
         <Text style={styles.paragraph}>{text}</Text>
       </View>
     );

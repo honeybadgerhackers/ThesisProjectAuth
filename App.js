@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
-import LoginNavigation from './src/components/navigation';
-import store from './src/store';
+import WayPoint from './src/components/screens/location';
+// import store from './src/store';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,11 +14,11 @@ const styles = StyleSheet.create({
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <View style={styles.container}>
-        <LoginNavigation />
-      </View>
-    </Provider>
+    // <Provider store={store}>
+    <View style={styles.container}>
+      <WayPoint />
+    </View>
+    // </Provider>
   );
 };
 
