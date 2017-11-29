@@ -27,6 +27,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@mapbox/polyline": "^0.2.0",
     "eslint": "^4.11.0",
     "expo": "^22.0.2",
     "prop-types": "^15.6.0",

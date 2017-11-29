@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Platform, Text, View, StyleSheet, Button } from 'react-native';
-import { Constants, Location, Permissions } from 'expo';
+import { MapView, Constants, Location, Permissions } from 'expo';
 
 export default class WayPoint extends Component {
   state = {
@@ -8,6 +8,12 @@ export default class WayPoint extends Component {
     errorMessage: null,
     disableButton: false,
     wayPoints: [],
+    // region: {
+    //   latitude: 41.850033,
+    //   longitude: -87.6500523,
+    //   latitudeDelta: 0,
+    //   longitudeDelta: 0,
+    // },
   };
 
   componentWillMount() {
@@ -31,6 +37,15 @@ export default class WayPoint extends Component {
     let location = await Location.getCurrentPositionAsync({});
     console.log(location);
     this.setState({ location });
+    this.setState({
+      region: {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      },
+    });
+    console.log(this.state.region);
   };
 
   _trackLocationAsync = async () => {
@@ -58,12 +73,18 @@ export default class WayPoint extends Component {
 
     return (
       <View style={styles.container}>
-        <Button
-          disabled={this.state.disableButton}
-          title="Watch Location"
-          onPress={this._trackLocationAsync}
+        <MapView
+          style={{ flex: 7 }}
+          initialRegion={this.state.region}
         />
-        <Text style={styles.paragraph}>{text}</Text>
+        <View style={{ flex: 3}}>
+          <Button
+            disabled={this.state.disableButton}
+            title="Watch Location"
+            onPress={this._trackLocationAsync}
+          />
+          <Text style={styles.paragraph}>{text}</Text>
+        </View>
       </View>
     );
   }
@@ -72,10 +93,6 @@ export default class WayPoint extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#ecf0f1',
   },
   paragraph: {
     margin: 24,
