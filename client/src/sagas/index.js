@@ -4,8 +4,10 @@ const watchGetTrips = function* () {
 
 // export watchGetTrips; 
 
-export default function* root() {
+const rootSaga = function* () {
  yield [
   watchGetTrips(),
  ];
 };
+
+export { watchGetTrips, rootSaga };

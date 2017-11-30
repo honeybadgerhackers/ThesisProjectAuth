@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoginView from '../views/login-view';
 import { loginUser } from '../../actions/user-actions';
-import { FB_APP_ID, facebookAuthUri, serverUri } from '../../../config';
+import { FB_APP_ID, facebookAuthUri, SERVER_URI } from '../../../config';
 
 class LoginContainer extends React.Component {
   static navigationOptions = {
@@ -40,18 +40,31 @@ class LoginContainer extends React.Component {
     // just prototyping then you don't need to concern yourself with this and
     // can copy this example, but be aware that this is not safe in production.
 
-    const { type, params, ...rest } = await AuthSession.startAsync({
+    const { type, params: { code }, ...rest } = await AuthSession.startAsync({
       authUrl: facebookAuthUri(FB_APP_ID, encodeURIComponent(redirectUrl)),
     });
 
-    console.log(type, params, rest);
-    
+    console.log(type, code, rest);
+
     if (type !== 'success') {
       Alert.alert('Error', 'Uh oh, something went wrong');
       this.setState({ disableButton: false });
       return;
     }
 
+    const userInfoResponse = await fetch(SERVER_URI, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code,
+        redirectUrl,
+      }),
+    });
+
+    console.log(userInfoResponse);
     // let userInfoResponse = await fetch(serverUri(code));
     // const {
     //   email, first_name, last_name, picture: { data: { url } },
