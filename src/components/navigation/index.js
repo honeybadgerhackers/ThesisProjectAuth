@@ -1,9 +1,11 @@
 import React from 'react';
+import { bindActionCreators } from "redux";
 import { BackHandler } from "react-native";
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addNavigationHelpers, NavigationActions } from 'react-navigation';
 import LoginStack from './login-stack';
+import { loginUser, logoutUser } from '../../actions/user-actions';
 
 class LoginNavigation extends React.Component {
   static propTypes = {
@@ -19,6 +21,10 @@ class LoginNavigation extends React.Component {
       routes: PropTypes.array,
     }).isRequired,
     dispatch: PropTypes.func.isRequired,
+    actions: PropTypes.shape({
+      loginUser: PropTypes.func.isRequired,
+      logoutUser: PropTypes.func.isRequired,
+    }).isRequired,
   }
 
   static defaultProps = {
@@ -44,11 +50,15 @@ class LoginNavigation extends React.Component {
   };
   render() {
     const { navigationState, dispatch, isLoggedIn } = this.props;
+    const { loginUser, logoutUser } = this.props.actions;
     const state = isLoggedIn ?
       navigationState.stateForLoggedIn :
       navigationState.stateForLoggedOut;
+    const identityAction = isLoggedIn ?
+      loginUser :
+      logoutUser;
     return (
-      <LoginStack navigation={addNavigationHelpers({ dispatch, state })} />
+      <LoginStack navigation={addNavigationHelpers({ dispatch, state })} identityAction={identityAction} />
     );
   }
 }
@@ -60,4 +70,8 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(LoginNavigation);
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators({ loginUser, logoutUser}, dispatch),
+  });
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginNavigation);
