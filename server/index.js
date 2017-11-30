@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const OAuthServer = require('express-oauth-server');
 
-const { PORT, REACT_NATIVE_PACKAGER_HOSTNAME } = process.env;
+const { PORT, FB_APP_ID, FB_SECRET, REACT_NATIVE_PACKAGER_HOSTNAME } = process.env;
 
 const app = express();
 app.OAuth = new OAuthServer({
