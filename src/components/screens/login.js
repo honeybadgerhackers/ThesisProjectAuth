@@ -4,6 +4,7 @@ import { AuthSession, LinearGradient } from 'expo';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { loginUser } from '../../actions/user-actions';
+import { FB_APP_ID, facebookAuthUri, facebookUri } from '../../../config';
 
 const styles = StyleSheet.create({
   box: {
@@ -25,8 +26,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
 });
-
-const FB_APP_ID = '530424093970397';
 
 class LoginContainer extends React.Component {
   static navigationOptions = {
@@ -61,12 +60,9 @@ class LoginContainer extends React.Component {
     // just prototyping then you don't need to concern yourself with this and
     // can copy this example, but be aware that this is not safe in production.
 
-    // ! move to server
+    // ! change to CODE
     let result = await AuthSession.startAsync({
-      authUrl:
-        `https://www.facebook.com/v2.8/dialog/oauth?response_type=token` +
-        `&client_id=${FB_APP_ID}` +
-        `&redirect_uri=${encodeURIComponent(redirectUrl)}`,
+      authUrl: facebookAuthUri(FB_APP_ID, encodeURIComponent(redirectUrl)),
     });
 
     if (result.type !== 'success') {
@@ -76,9 +72,8 @@ class LoginContainer extends React.Component {
     }
 
     let accessToken = result.params.access_token;
-    const facebookURI = `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,last_name,first_name,email,picture.type(large)`;
 
-    let userInfoResponse = await fetch(facebookURI);
+    let userInfoResponse = await fetch(facebookUri(accessToken));
     const {
       email, first_name, last_name, picture: { data: { url } },
     } = await userInfoResponse.json();
