@@ -61,6 +61,7 @@ class LoginContainer extends React.Component {
     // just prototyping then you don't need to concern yourself with this and
     // can copy this example, but be aware that this is not safe in production.
 
+    // ! move to server
     let result = await AuthSession.startAsync({
       authUrl:
         `https://www.facebook.com/v2.8/dialog/oauth?response_type=token` +
