@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, Image, View, Button } from 'react-native';
+import { StyleSheet, Image, View, Button, Alert } from 'react-native';
 import { AuthSession, LinearGradient } from 'expo';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { loginUser } from '../../actions/user-actions';
 
 const styles = StyleSheet.create({
   box: {
@@ -26,14 +28,14 @@ const styles = StyleSheet.create({
 
 const FB_APP_ID = '530424093970397';
 
-export default class Login extends React.Component {
+class LoginContainer extends React.Component {
   static navigationOptions = {
     title: 'Login',
     header: null,
   };
 
   static propTypes = {
-    // loginUser: PropTypes.func.isRequired,
+    loginUser: PropTypes.func.isRequired,
   };
 
   state = {
@@ -89,7 +91,7 @@ export default class Login extends React.Component {
     };
     // ! This is where user state is being set ! //
     this.setState({ disableButton: false });
-    this.props.screenProps.identityAction(user);
+    this.props.loginUser(user);
   };
 
   render = () => (
@@ -130,3 +132,11 @@ export default class Login extends React.Component {
     </View>
   );
 }
+
+const mapDispatchToProps = {
+  loginUser,
+};
+
+const Login = connect(null, mapDispatchToProps)(LoginContainer);
+
+export default Login;
