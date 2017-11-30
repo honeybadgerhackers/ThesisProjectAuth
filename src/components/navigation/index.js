@@ -20,8 +20,8 @@ class LoginNavigation extends React.Component {
       index: PropTypes.number,
       routes: PropTypes.array,
     }).isRequired,
-    dispatch: PropTypes.func.isRequired,
     actions: PropTypes.shape({
+      // dispatch: PropTypes.func.isRequired,
       loginUser: PropTypes.func.isRequired,
       logoutUser: PropTypes.func.isRequired,
     }).isRequired,
@@ -32,6 +32,7 @@ class LoginNavigation extends React.Component {
   };
 
   componentDidMount() {
+    // console.log('index', this.props, this.props.actions.loginUser);
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
   }
 
@@ -49,16 +50,16 @@ class LoginNavigation extends React.Component {
     return true;
   };
   render() {
-    const { navigationState, dispatch, isLoggedIn } = this.props;
+    const { navigationState, isLoggedIn, dispatch } = this.props;
     const { loginUser, logoutUser } = this.props.actions;
     const state = isLoggedIn ?
       navigationState.stateForLoggedIn :
       navigationState.stateForLoggedOut;
     const identityAction = isLoggedIn ?
-      loginUser :
-      logoutUser;
+      logoutUser :
+      loginUser;
     return (
-      <LoginStack navigation={addNavigationHelpers({ dispatch, state })} identityAction={identityAction} />
+      <LoginStack navigation={addNavigationHelpers({ dispatch, state })} screenProps={{ identityAction }} />
     );
   }
 }
@@ -72,6 +73,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
     actions: bindActionCreators({ loginUser, logoutUser}, dispatch),
+    dispatch,
   });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginNavigation);
