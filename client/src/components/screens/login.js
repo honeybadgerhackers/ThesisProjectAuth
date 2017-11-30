@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoginView from '../views/login-view';
 import { loginUser } from '../../actions/user-actions';
-import { FB_APP_ID, facebookAuthUri, facebookUri } from '../../../config';
+import { FB_APP_ID, facebookAuthUri, serverUri } from '../../../config';
 
 class LoginContainer extends React.Component {
   static navigationOptions = {
@@ -40,34 +40,33 @@ class LoginContainer extends React.Component {
     // just prototyping then you don't need to concern yourself with this and
     // can copy this example, but be aware that this is not safe in production.
 
-    // ! change to CODE
-    let result = await AuthSession.startAsync({
+    const { type, params, ...rest } = await AuthSession.startAsync({
       authUrl: facebookAuthUri(FB_APP_ID, encodeURIComponent(redirectUrl)),
     });
 
-    if (result.type !== 'success') {
+    console.log(type, params, rest);
+    
+    if (type !== 'success') {
       Alert.alert('Error', 'Uh oh, something went wrong');
       this.setState({ disableButton: false });
       return;
     }
 
-    let accessToken = result.params.access_token;
-
-    let userInfoResponse = await fetch(facebookUri(accessToken));
-    const {
-      email, first_name, last_name, picture: { data: { url } },
-    } = await userInfoResponse.json();
-    const user = {
-      first: first_name,
-      last: last_name,
-      profilePic: url,
-      // ! THIS IS NOT SECURE ! //
-      token: accessToken,
-      email,
-    };
-    // ! This is where user state is being set ! //
-    this.setState({ disableButton: false });
-    this.props.loginUser(user);
+    // let userInfoResponse = await fetch(serverUri(code));
+    // const {
+    //   email, first_name, last_name, picture: { data: { url } },
+    // } = await userInfoResponse.json();
+    // const user = {
+    //   first: first_name,
+    //   last: last_name,
+    //   profilePic: url,
+    //   // ! THIS IS NOT SECURE ! //
+    //   token: accessToken,
+    //   email,
+    // };
+    // // ! This is where user state is being set ! //
+    // this.setState({ disableButton: false });
+    // this.props.loginUser(user);
   };
 
   render = () => (
