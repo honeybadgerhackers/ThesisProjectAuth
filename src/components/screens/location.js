@@ -73,7 +73,7 @@ export default class WayPoint extends Component {
       let resp;
       // * Ali says all URLs should go in a config file. Maybe set these as a function
       // *  that returns the correct one with the space filled in?
-      if (!origin) {
+      if (!joinedWaypoints) {
         resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&waypoints=${joinedWaypoints}`);
       } else {
         resp = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}`);
@@ -163,7 +163,7 @@ export default class WayPoint extends Component {
     // * Could probably be broken off into it's own components to make this
     // *  file less sprawling.
     // * Watch location enables location tracking, Stop Watching turns it off
-    // *  and also fires off the 'render waypoints' function.
+    // *  and also fires off the 'render way points' function.
     return (
       <View style={styles.container}>
         <MapView
