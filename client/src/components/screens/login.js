@@ -40,11 +40,10 @@ class LoginContainer extends React.Component {
     // just prototyping then you don't need to concern yourself with this and
     // can copy this example, but be aware that this is not safe in production.
 
-    const { type, params: { code }, ...rest } = await AuthSession.startAsync({
+    
+    const { type, params: { code } } = await AuthSession.startAsync({
       authUrl: facebookAuthUri(FB_APP_ID, encodeURIComponent(redirectUrl)),
     });
-
-    console.log(type, code, rest);
 
     if (type !== 'success') {
       Alert.alert('Error', 'Uh oh, something went wrong');
@@ -64,22 +63,29 @@ class LoginContainer extends React.Component {
       }),
     });
 
-    console.log(userInfoResponse);
     // let userInfoResponse = await fetch(serverUri(code));
-    // const {
-    //   email, first_name, last_name, picture: { data: { url } },
-    // } = await userInfoResponse.json();
-    // const user = {
-    //   first: first_name,
-    //   last: last_name,
-    //   profilePic: url,
-    //   // ! THIS IS NOT SECURE ! //
-    //   token: accessToken,
-    //   email,
-    // };
-    // // ! This is where user state is being set ! //
-    // this.setState({ disableButton: false });
-    // this.props.loginUser(user);
+    const userData = await userInfoResponse.json();
+    if (userData.type !== 'success!') {
+      Alert.alert('Error', 'Unable to retrieve user data');
+      this.setState({ disableButton: false });
+      return;
+    }
+    const {
+      email, first_name, last_name,
+      picture: { data: { url } },
+      accessToken: { access_token, expires_in },
+    } = userData;
+    const user = {
+      first: first_name,
+      last: last_name,
+      profilePic: url,
+      token: access_token,
+      email,
+    };
+    console.log(user);
+    // ! This is where user state is being set ! //
+    this.setState({ disableButton: false });
+    this.props.loginUser(user);
   };
 
   render = () => (
