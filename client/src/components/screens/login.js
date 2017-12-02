@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LoginView from '../views/login-view';
 import { loginUser } from '../../actions/user-actions';
-import { FB_APP_ID, facebookAuthUri, facebookUri } from '../../../config';
+import { FB_APP_ID, facebookAuthUri, SERVER_URI } from '../../../config';
 
 class LoginContainer extends React.Component {
   static navigationOptions = {
@@ -40,31 +40,49 @@ class LoginContainer extends React.Component {
     // just prototyping then you don't need to concern yourself with this and
     // can copy this example, but be aware that this is not safe in production.
 
-    // ! change to CODE
-    let result = await AuthSession.startAsync({
+    
+    const { type, params: { code } } = await AuthSession.startAsync({
       authUrl: facebookAuthUri(FB_APP_ID, encodeURIComponent(redirectUrl)),
     });
 
-    if (result.type !== 'success') {
+    if (type !== 'success') {
       Alert.alert('Error', 'Uh oh, something went wrong');
       this.setState({ disableButton: false });
       return;
     }
 
-    let accessToken = result.params.access_token;
+    const userInfoResponse = await fetch(SERVER_URI, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code,
+        redirectUrl,
+      }),
+    });
 
-    let userInfoResponse = await fetch(facebookUri(accessToken));
+    // let userInfoResponse = await fetch(serverUri(code));
+    const userData = await userInfoResponse.json();
+    if (userData.type !== 'success!') {
+      Alert.alert('Error', 'Unable to retrieve user data');
+      this.setState({ disableButton: false });
+      return;
+    }
     const {
-      email, first_name, last_name, picture: { data: { url } },
-    } = await userInfoResponse.json();
+      email, first_name, last_name,
+      picture: { data: { url } },
+      accessToken: { access_token, expires_in },
+    } = userData;
     const user = {
       first: first_name,
       last: last_name,
       profilePic: url,
-      // ! THIS IS NOT SECURE ! //
-      token: accessToken,
+      token: access_token,
       email,
     };
+    console.log(user);
     // ! This is where user state is being set ! //
     this.setState({ disableButton: false });
     this.props.loginUser(user);
