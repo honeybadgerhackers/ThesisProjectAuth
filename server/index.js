@@ -12,6 +12,10 @@ app.OAuth = new OAuthServer({
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Access Denied! \u{1F610}');
+});
+
 app.post('/authorize', async (req, res) => {
   const { code, redirectUrl } = req.body;
   const data = await fbAuth.authorizeUser(code, redirectUrl);
@@ -26,7 +30,15 @@ app.post('/authorize', async (req, res) => {
   res.send(user);
 });
 
-app.listen({ host: REACT_NATIVE_PACKAGER_HOSTNAME, port: PORT }, () => {
+const serverParams = {
+  port: PORT,
+}
+
+if (REACT_NATIVE_PACKAGER_HOSTNAME) {
+  serverParams.host = REACT_NATIVE_PACKAGER_HOSTNAME;
+}
+
+app.listen(serverParams, () => {
   // eslint-disable-next-line
-    console.log(`Listening on ${REACT_NATIVE_PACKAGER_HOSTNAME}:${PORT}`);
+    console.log(`Listening on ${PORT}`);
 });
