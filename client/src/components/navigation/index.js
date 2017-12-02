@@ -43,7 +43,7 @@ class LoginNavigation extends React.Component {
     return true;
   };
   render() {
-    const { navigationState, dispatch, isLoggedIn } = this.props;
+    const { navigationState, isLoggedIn, dispatch } = this.props;
     const state = isLoggedIn ?
       navigationState.stateForLoggedIn :
       navigationState.stateForLoggedOut;
