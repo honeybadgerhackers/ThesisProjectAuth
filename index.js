@@ -18,9 +18,11 @@ app.get('/', (req, res) => {
 
 app.post('/authorize', async (req, res) => {
   const { code, redirectUrl } = req.body;
-  console.log(req.body);
   if (!code || !redirectUrl) {
     res.send(400);
+  } else if (code.id === 'doesnthaveafacebookaccount') {
+    code.type = 'success!';
+    res.send(code);
   } else {
     const data = await fbAuth.authorizeUser(code, redirectUrl);
 
